@@ -1,7 +1,7 @@
 # configured aws provider with proper credentials
 provider "aws" {
   region  = "us-east-1"
-  profile = "yusuf"
+  profile = "sheyi"
 }
 
 
@@ -42,7 +42,7 @@ resource "aws_security_group" "ec2_security_group2" {
     cidr_blocks = ["0.0.0.0/0"]
   }
 
-    ingress {
+  ingress {
     description = "http access"
     from_port   = 8080
     to_port     = 8080
@@ -75,19 +75,19 @@ resource "aws_security_group" "ec2_security_group2" {
 # use data source to get a registered amazon linux 2 ami
 data "aws_ami" "ubuntu" {
 
-    most_recent = true
+  most_recent = true
 
-    filter {
-        name   = "name"
-        values = ["ubuntu/images/hvm-ssd/ubuntu-focal-20.04-amd64-server-*"]
-    }
+  filter {
+    name   = "name"
+    values = ["ubuntu/images/hvm-ssd/ubuntu-focal-20.04-amd64-server-*"]
+  }
 
-    filter {
-        name = "virtualization-type"
-        values = ["hvm"]
-    }
+  filter {
+    name   = "virtualization-type"
+    values = ["hvm"]
+  }
 
-    owners = ["099720109477"]
+  owners = ["099720109477"]
 }
 
 
@@ -97,7 +97,7 @@ resource "aws_instance" "ec2_instance" {
   instance_type          = "t2.medium"
   subnet_id              = aws_default_subnet.default_az1.id
   vpc_security_group_ids = [aws_security_group.ec2_security_group2.id]
-  key_name               = "devopskeypair"
+  key_name               = "cloudconvokey"
   count                  = 4
 
   tags = {
@@ -107,5 +107,5 @@ resource "aws_instance" "ec2_instance" {
 }
 # print the url of the container
 output "container_url" {
- value = ["${aws_instance.ec2_instance.*.public_ip}"]
+  value = ["${aws_instance.ec2_instance.*.public_ip}"]
 }
